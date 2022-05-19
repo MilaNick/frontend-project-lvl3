@@ -60,7 +60,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, 'src/favicon.ico'),
+          from: path.resolve(__dirname, 'src/images/favicon.ico'),
           to: path.resolve(__dirname, 'dist'),
         },
       ],
