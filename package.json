@@ -22,8 +22,13 @@
     "url": "git+https://github.com/MilaNick/frontend-project-lvl3.git"
   },
   "keywords": [
+    "axios",
+    "bootstrap",
+    "i18next",
     "rss",
-    "training"
+    "on-change",
+    "training",
+    "yup"
   ],
   "author": "Mila Zolotova <l.zolotova@yahoo.com>",
   "license": "ISC",
