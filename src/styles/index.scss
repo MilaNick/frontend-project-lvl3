@@ -1,0 +1,51 @@
+@import "~bootstrap/scss/bootstrap";
+
+body{
+  box-sizing: border-box;
+}
+
+.container{
+  display: flex;
+  flex-direction: column;
+  height: 98vh;
+  margin: 10px auto;
+  padding: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+}
+
+.header{
+  width: 100%;
+  padding: 60px;
+  position: sticky;
+}
+
+.h1-title{
+  padding: 20px 0;
+}
+
+.bi{
+  padding: 5px;
+}
+
+form div{
+  margin-bottom: 10px;
+}
+
+.wrap{
+  height: 80%;
+  overflow: auto;
+  padding: 20px;
+}
+
+.articles{
+  padding: 20px;
+}
+
+.footer{
+  height: 100px;
+  background: #e9ecef;
+}
+
+
