@@ -6,120 +6,86 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>RSS aggregator</title>
 </head>
-<body class="bg-light">
-<div class="container">
-    <header class="header bg-secondary">
-        <h1 class="fs-1 text-light h1-title"><i class="bi bi-rss"></i>RSS aggregator</h1>
-        <form class="row">
-            <div class="col-12 col-md-12 col-lg-3">
-                Enter the link, for example: ССЫЛКА
+<body class="d-flex flex-column min-vh-100">
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Виды API / HTTP API</h5>
+                <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="col-12 col-md-12 col-lg-6">
-                <label for="inputFofLink" class="visually-hidden">Enter the link</label>
-                <input type="text" class="form-control" id="inputFofLink" placeholder="Enter the link">
+            <div class="modal-body text-break">Цель: Познакомиться с тем, каким бывает HTTP API (RPC, REST)</div>
+            <div class="modal-footer"><a class="btn btn-primary full-article"
+                                         href="https://ru.hexlet.io/courses/http-api/lessons/kinds/theory_unit"
+                                         role="button" target="_blank" rel="noopener noreferrer">Читать полностью </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
             </div>
-            <div class="col-12 col-md-12 col-lg-3">
-                <button type="submit" class="btn btn-light"><i class="bi bi-rss"></i>Search</button>
-            </div>
-        </form>
-    </header>
-    <div class="wrap .bg-light.bg-gradient">
-        <section class="articles">
-            <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est et eum fugiat harum optio quaerat quasi
-                temporibus
-                unde voluptates! Adipisci aspernatur beatae exercitationem harum inventore numquam odio omnis unde vero.
-            </div>
-            <div>Ab ad aliquam animi architecto at autem dolor dolores doloribus, fuga ipsa magni minus molestias
-                mollitia natus
-                nihil omnis perspiciatis provident quae quia quidem quisquam reiciendis sequi soluta tenetur, ut.
-            </div>
-            <div>Ab, alias atque commodi delectus dicta, dignissimos ducimus ea error eum excepturi illo illum in iure
-                laborum odit
-                placeat praesentium quasi reiciendis rem rerum sit tempore totam veritatis voluptates voluptatibus.
-            </div>
-            <div>Ab accusantium aspernatur dignissimos dolore doloribus ducimus enim eveniet excepturi fuga, harum,
-                labore magni
-                mollitia nam, nemo nesciunt numquam placeat quis ratione reiciendis rerum similique suscipit ullam ut
-                vel voluptas!
-            </div>
-            <div>Earum incidunt ipsam maiores molestias odit reprehenderit similique! Cupiditate eaque eligendi enim
-                excepturi,
-                fugiat harum in inventore, laboriosam, quam quisquam reiciendis soluta voluptatem? Beatae dolorem
-                laboriosam optio
-                quia quibusdam, velit.
-            </div>
-            <div>A ab accusantium, aperiam asperiores beatae consequuntur dolore eveniet, expedita facilis, fugit illo
-                illum ipsum
-                nemo officiis omnis optio quam quis quo sapiente sunt ullam unde vel velit. Eos, quia.
-            </div>
-            <div>Dolorem error excepturi id obcaecati repudiandae sapiente! Accusantium, ad animi autem consectetur
-                cumque doloribus
-                eius, eligendi error eveniet impedit ipsa iusto magnam nisi, non optio perferendis recusandae sint ullam
-                voluptatibus.
-            </div>
-            <div>Amet atque autem consectetur cupiditate deleniti deserunt distinctio dolor ducimus eius error explicabo
-                fuga fugiat
-                hic id illo ipsum laborum molestias nobis officiis pariatur quod repudiandae sint, totam vitae,
-                voluptates?
-            </div>
-            <div>Blanditiis deserunt eos ex magni nostrum quaerat sint. Amet architecto aut consequuntur, dignissimos
-                dolor
-                doloribus est ex excepturi explicabo illo iusto labore, neque nihil nostrum obcaecati officia possimus
-                quae, quo!
-            </div>
-            <div>Aperiam beatae commodi doloremque error facilis fugiat id iusto laudantium, maiores minima nemo nihil,
-                quis
-                reiciendis reprehenderit saepe sed sequi sunt voluptatum. Aliquam at facere iure magnam necessitatibus
-                pariatur sit!
-            </div>
-            <div>At aut blanditiis, commodi dolorem eaque excepturi exercitationem fugit hic iure maiores, nemo odit
-                omnis
-                perferendis porro similique. Atque delectus dolor eligendi incidunt iure maiores molestiae nisi saepe
-                sunt tempora!
-            </div>
-            <div>Aliquid debitis deleniti, dolores esse illo laboriosam, mollitia natus nihil nulla praesentium
-                provident quia quod
-                quos sapiente soluta suscipit ut veniam! A accusantium adipisci cum fugit, possimus tempora ut voluptas?
-            </div>
-            <div>Ab alias asperiores doloremque dolores fugit harum illo officiis reprehenderit voluptate! Ab aperiam
-                aspernatur
-                commodi dicta, ipsa libero magni nam odio officiis porro quam repellendus totam ullam vel vero
-                voluptatum.
-            </div>
-            <div>Dolorem dolores earum sint? Accusamus aliquam asperiores aspernatur assumenda autem debitis, deleniti
-                esse
-                excepturi, expedita fugiat illum iste laudantium magnam officia perferendis quaerat quidem quisquam,
-                reprehenderit
-                rerum sed suscipit tempora.
-            </div>
-            <div>Fugit molestias repellat unde. Aut dicta dolore facere harum labore laborum laudantium natus
-                necessitatibus nostrum
-                numquam quam reiciendis, velit veniam? Cum cumque, iusto libero nulla praesentium quisquam quos vel
-                voluptatum!
-            </div>
-            <div>Accusamus consectetur cupiditate dolores ex fuga fugiat iste iure libero maiores minus optio possimus
-                quod
-                reprehenderit sed, unde? Alias cupiditate doloremque dolores error eveniet id placeat quaerat, repellat
-                repellendus
-                sapiente.
-            </div>
-            <div>Animi architecto beatae consectetur eius est expedita fuga hic impedit ipsum iure libero maxime nam
-                natus neque
-                odio odit omnis optio placeat quisquam, ratione, sapiente soluta tempore ut vel voluptate!
-            </div>
-            <div>Delectus expedita sunt velit. Asperiores aut delectus dolore dolorem ex, fuga in incidunt ipsam maiores
-                nulla
-                perspiciatis porro quae quisquam recusandae vel? Aut doloribus dolorum modi numquam quisquam suscipit
-                vero.
-            </div>
-            <div>Aperiam commodi ex in modi omnis pariatur quibusdam recusandae repudiandae sint ullam. Alias assumenda
-                eaque
-                facilis impedit iste iusto modi molestiae officiis porro praesentium quam, quidem sint unde voluptas
-                voluptates.
-            </div>
-        </section>
+        </div>
     </div>
-    <footer class="footer"></footer>
+</div>
+<main class="flex-grow-1">
+    <section class="container-fluid bg-dark p-5">
+        <div class="row">
+            <div class="col-md-10 col-lg-8 mx-auto text-white"><h1 class="display-3 mb-0">RSS агрегатор</h1>
+                <p class="lead">Начните читать RSS сегодня! Это легко, это красиво.</p>
+                <form action="" class="rss-form text-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-floating"><input id="url-input" autofocus="" required="" name="url"
+                                                              aria-label="url" class="form-control w-100"
+                                                              placeholder="ссылка RSS" autocomplete="off"> <label
+                                    for="url-input">Ссылка RSS</label></div>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" aria-label="add" class="h-100 btn btn-lg btn-primary px-sm-5">
+                                Добавить
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <p class="mt-2 mb-0 text-muted">Пример: https://ru.hexlet.io/lessons.rss</p>
+                <p class="feedback m-0 position-absolute small text-success">RSS успешно загружен</p></div>
+        </div>
+    </section>
+    <section class="container-fluid container-xxl p-5">
+        <div class="row">
+            <div class="col-md-10 col-lg-8 order-1 mx-auto posts">
+                <div class="card border-0">
+                    <div class="card-body"><h2 class="card-title h4">Посты</h2></div>
+                    <ul class="list-group border-0 rounded-0">
+                        <li class="list-group-item d-flex justify-content-between align-items-start border-0 border-end-0">
+                            <a href="https://ru.hexlet.io/courses/http-api/lessons/openapi/theory_unit" class="fw-bold"
+                               data-id="2" target="_blank" rel="noopener noreferrer">OpenAPI (ранее Swagger
+                                Specification) / HTTP API</a>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-id="2"
+                                    data-bs-toggle="modal" data-bs-target="#modal">Просмотр
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 feeds">
+                <div class="card border-0">
+                    <div class="card-body"><h2 class="card-title h4">Фиды</h2></div>
+                    <ul class="list-group border-0 rounded-0">
+                        <li class="list-group-item border-0 border-end-0"><h3 class="h6 m-0">Новые уроки на
+                            Хекслете</h3>
+                            <p class="m-0 small text-black-50">Практические уроки по программированию</p></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<footer class="footer border-top py-3 mt-5 bg-light">
+    <div class="container-xl">
+        <div class="text-center">created by <a href="https://github.com/MilaNick/frontend-project-lvl3"
+                                               target="_blank">MilaNick</a></div>
+    </div>
+</footer>
+<div>
+    <div style="display: none; position: fixed; top: 30px; width: auto; max-width: 100%; text-align: center; left: 50%; transform: translateX(-50%); z-index: 99999999;">
+        <div style="display: inline-block; font-size: 14px; font-weight: bold; border: 1px solid rgb(240, 195, 109); background-color: rgb(249, 237, 190); padding: 0px 10px; border-radius: 2px; box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 4px;"></div>
+    </div>
 </div>
 </body>
 </html>
