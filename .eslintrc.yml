@@ -10,4 +10,8 @@ parserOptions:
 rules:
   no-console: 0
   import/extensions: 0 # FIXME: remove when rule will be adjusted for new nodejs version
+  max-len: [2, {"code": 280, "tabWidth": 4, "ignoreUrls": true}]
   no-underscore-dangle: [ 2, { "allow": [ "__filename", "__dirname" ] } ]
+  import/no-unresolved: 0
+  import/prefer-default-export: 0
+

@@ -9,9 +9,9 @@ test-coverage:
 	NODE_OPTIONS=--experimental-vm-modules  npx jest --coverage
 test:
 	NODE_OPTIONS=--experimental-vm-modules  npx jest
-lint:
+make lint:
 	npx eslint .
 lint-fix:
-	npx eslint --fix webpack.config.js
+	npx eslint --fix src/view.js
 
 .PHONY: test

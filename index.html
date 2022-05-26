@@ -10,66 +10,56 @@
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header"><h5 class="modal-title">Виды API / HTTP API</h5>
+            <div class="modal-header"><h5 class="modal-title"></h5>
                 <button type="button" class="btn-close close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-break">Цель: Познакомиться с тем, каким бывает HTTP API (RPC, REST)</div>
-            <div class="modal-footer"><a class="btn btn-primary full-article"
+            <div class="modal-footer"><a class="read btn btn-primary full-article"
                                          href="https://ru.hexlet.io/courses/http-api/lessons/kinds/theory_unit"
-                                         role="button" target="_blank" rel="noopener noreferrer">Читать полностью </a>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                         role="button" target="_blank" rel="noopener noreferrer"></a>
+                <button type="button" class="close-btn btn btn-secondary" data-bs-dismiss="modal"></button>
             </div>
         </div>
     </div>
 </div>
 <main class="flex-grow-1">
-    <section class="container-fluid bg-dark p-5">
+    <section class="header container-fluid bg-dark p-5">
         <div class="row">
-            <div class="col-md-10 col-lg-8 mx-auto text-white"><h1 class="display-3 mb-0">RSS агрегатор</h1>
-                <p class="lead">Начните читать RSS сегодня! Это легко, это красиво.</p>
-                <form action="" class="rss-form text-body">
+            <div class="col-md-10 col-lg-8 mx-auto text-white"><h1 class="display-3 mb-0"></h1>
+                <p class="lead"></p>
+                <form action="" class="rss-form text-body rss-link">
                     <div class="row">
                         <div class="col">
                             <div class="form-floating"><input id="url-input" autofocus="" required="" name="url"
                                                               aria-label="url" class="form-control w-100"
-                                                              placeholder="ссылка RSS" autocomplete="off"> <label
+                                                              autocomplete="off"><label
                                     for="url-input">Ссылка RSS</label></div>
                         </div>
                         <div class="col-auto">
-                            <button type="submit" aria-label="add" class="h-100 btn btn-lg btn-primary px-sm-5">
-                                Добавить
-                            </button>
+                            <button type="submit" aria-label="add" class="h-100 btn btn-lg btn-primary px-sm-5"></button>
                         </div>
                     </div>
                 </form>
-                <p class="mt-2 mb-0 text-muted">Пример: https://ru.hexlet.io/lessons.rss</p>
-                <p class="feedback m-0 position-absolute small text-success">RSS успешно загружен</p></div>
+                <p class="example mt-2 mb-0 text-muted"></p>
+                <p class="feedback m-0 position-absolute small text-success"></p></div>
         </div>
     </section>
-    <section class="container-fluid container-xxl p-5">
+    <section class="main container-fluid container-xxl p-5">
         <div class="row">
             <div class="col-md-10 col-lg-8 order-1 mx-auto posts">
                 <div class="card border-0">
-                    <div class="card-body"><h2 class="card-title h4">Посты</h2></div>
-                    <ul class="list-group border-0 rounded-0">
-                        <li class="list-group-item d-flex justify-content-between align-items-start border-0 border-end-0">
-                            <a href="https://ru.hexlet.io/courses/http-api/lessons/openapi/theory_unit" class="fw-bold"
-                               data-id="2" target="_blank" rel="noopener noreferrer">OpenAPI (ранее Swagger
-                                Specification) / HTTP API</a>
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-id="2"
-                                    data-bs-toggle="modal" data-bs-target="#modal">Просмотр
-                            </button>
-                        </li>
+                    <div class="card-body"><h2 class="card-title h4 posts-title">Посты</h2></div>
+                    <ul class="group-feeds list-group border-0 rounded-0">
+
                     </ul>
                 </div>
             </div>
             <div class="col-md-10 col-lg-4 mx-auto order-0 order-lg-1 feeds">
                 <div class="card border-0">
-                    <div class="card-body"><h2 class="card-title h4">Фиды</h2></div>
+                    <div class="card-body"><h2 class="card-title feeds-title h4"></h2></div>
                     <ul class="list-group border-0 rounded-0">
-                        <li class="list-group-item border-0 border-end-0"><h3 class="h6 m-0">Новые уроки на
-                            Хекслете</h3>
-                            <p class="m-0 small text-black-50">Практические уроки по программированию</p></li>
+                        <li class="list-group-item border-0 border-end-0"><h3 class="new-lessons  h6 m-0"></h3>
+                            <p class="practical-lessons m-0 small text-black-50"></p></li>
                     </ul>
                 </div>
             </div>
