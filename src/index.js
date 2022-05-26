@@ -9,7 +9,7 @@ import 'bootstrap';
 import 'bootstrap-icons/font/bootstrap-icons.scss';
 
 runApp();
-renderText(resources);
+// renderText(resources);
 
 const form = document.querySelector('.rss-link');
 // const button = form.querySelector('[aria-label="add"]');
@@ -52,3 +52,4 @@ form.addEventListener('submit', ((e) => {
   }
   form.reset();
 }));
+

@@ -1,5 +1,7 @@
 import i18n from 'i18next';
 import resources from './locales/index.js';
+import {renderText} from "./view.js";
+
 
 export default async () => {
   const i18nextInstance = i18n.createInstance();
@@ -8,5 +10,5 @@ export default async () => {
     debug: false,
     resources,
   });
-  await console.log(i18nextInstance);
+  renderText(i18nextInstance);
 };

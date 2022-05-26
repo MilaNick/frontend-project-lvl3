@@ -9,23 +9,23 @@ export default {
       networkError: 'Ошибка сети',
       success: 'RSS успешно загружен',
     },
-  },
-  titleHeader: 'RSS агрегатор',
-  description: 'Начните читать RSS сегодня! Это легко, это красиво.',
-  example: 'Пример: https://ru.hexlet.io/lessons.rss',
-  placeholder: 'Ссылка RSS',
-  feeds: {
-    title: 'Фиды',
-  },
-  posts: {
-    posting: 'Посты',
-    button: 'Добавить',
-    newLessons: 'Новые уроки на Хекслете',
-    practicalLessons: 'Практические уроки по программированию',
-  },
-  modal: {
-    read: 'Читать далее',
-    close: 'Закрыть',
-    modalTitle: 'Виды API / HTTP API',
+    titleHeader: 'RSS агрегатор',
+    description: 'Начните читать RSS сегодня! Это легко, это красиво.',
+    example: 'Пример: https://ru.hexlet.io/lessons.rss',
+    placeholder: 'Ссылка RSS',
+    feeds: {
+      title: 'Фиды',
+    },
+    posts: {
+      posting: 'Посты',
+      button: 'Добавить',
+      newLessons: 'Новые уроки на Хекслете',
+      practicalLessons: 'Практические уроки по программированию',
+    },
+    modal: {
+      read: 'Читать далее',
+      close: 'Закрыть',
+      modalTitle: 'Виды API / HTTP API',
+    },
   },
 };
