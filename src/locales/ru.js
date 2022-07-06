@@ -25,7 +25,7 @@ export default {
     modal: {
       read: 'Читать далее',
       close: 'Закрыть',
-      modalTitle: 'Виды API / HTTP API',
+      modalTitle: '1Виды API / HTTP API',
     },
   },
 };
