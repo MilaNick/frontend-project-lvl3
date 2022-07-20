@@ -1,7 +1,9 @@
-import init from './init.js';
-import { renderText, renderPosts } from './view.js';
-import * as yup from 'yup';
+import i18n from 'i18next';
+import resources from './locales/index.js';
+import * as yup  from 'yup';
+import _ from 'lodash';
 import onChange from 'on-change';
+import {handler, renderText} from './view.js'
 import axios from 'axios'
 import parser from './parser.js'
 
@@ -22,28 +24,96 @@ export const elems = {
   read: document.querySelector('.read'),
 }
 
-export default () => {
-  init();
-  const {form, input, btn, feedback, posts, ul, card, feeds } = elems;
-  const state = {
-    listOfFeeds: [
-      { rss: 'https://ru.hexlet.io/courses/js-polymorphism3' },
-    ],
-  };
-  const { listOfFeeds } = state;
-  const validate = (url, feeds) => {
-    return yup.string().url('mustBeValid').notOneOf(feeds, 'rssExists').validate(url);
-  };
+const validate = (url, urls) => {
+  return yup.string().url('mustBeValid').notOneOf(urls, 'rssExists').validate(url);
+};
 
-// const watchedState = onChange(state, handler);
-  form.addEventListener('submit', ((e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const url = { rss: formData.get('url') };
-    validate(url, feeds)
+const  createPosts = (feedID, data) => (data
+  .items.reverse().map((post) => {
+    const { title, description, link } = post;
+    return { id: _.uniqueId(), feedID, title, description, link,}
+  })
+);
+
+const createFeed = (url, data) => ({id: _.uniqueId(), url, title: data.title, description: data.description,});
+
+const createViewPost = (data) => (data.map((post) => ({postID: post.id, view: false})))
+
+const updatePosts = (id, data, state) => {
+  const posts = createPosts(id, data);
+  const viewPost =  createViewPost(posts);
+  state.listOfPosts.push(...posts);
+  state.viewPosts.push(...viewPost);
+}
+
+const updateFeeds = (state) => {
+  const promise = state.listOfFeeds.map((feed) => axios
+    .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`)
+    .then((response) => {
+      const { id } = feed;
+      const newPosts = parser(response.data.contents).items;
+      const oldPosts = state.listOfPosts.filter((p) => p.feedID === id);
+      const difference = _.differenceWith(
+        newPosts, oldPosts, (a, b) => a.title === b.title,
+      );
+
+      if (difference.length > 0) {
+        const diffData = {
+          items: difference,
+        };
+        updatePosts(id, diffData, state);
+      }
+    })
+    .catch((err) => {
+      state.message = err;
+    }));
+  Promise.all(promise).finally(() => setTimeout(() => updateFeeds(state), 5000));
+};
+
+const addFeed = (url, data, state) => {
+  const dataFeed = createFeed(url, data);
+  const { id } = dataFeed;
+  const dataPosts = createPosts(id, data);
+  const dataView = createViewPost(dataPosts);
+  state.urls.push(url);
+  state.listOfFeeds.push(dataFeed);
+  state.listOfPosts.push(...dataPosts);
+  state.viewPosts.push(...dataView);
+}
+
+export default () => {
+  const i18nextInstance = i18n.createInstance();
+  i18nextInstance.init({
+    lng: 'ru',
+    debug: false,
+    resources,
+  })
+    .then(() => renderText(i18nextInstance))
+    .then(() => {
+      const state = {
+        loadResult: '',
+        message: null,
+        urls: [],
+        listOfFeeds: [],
+        listOfPosts: [],
+        viewPosts: [],
+        modal: null,
+      };
+
+  const {loadResult, message, urls, listOfFeeds, listOfPosts, viewPosts, modal } = state;
+  const watchedState = onChange(state, handler);
+  const {form, input, btn, feedback, posts, ul, card, feeds } = elems;
+
+
+  form.addEventListener('submit', ((event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const url = formData.get('url');
+    validate(url, state.urls)
       .then((value) => {
         input.classList.remove('is-invalid');
-        state.listOfFeeds = [...listOfFeeds, value];
+        watchedState.listOfFeeds = [...listOfFeeds, value];
+        console.log('state', state)
       })
       .catch((err) => {
         console.log(err); // здесь обвести красной линией инпут если адрес невалидный, затем куда-то вывести сообщение
@@ -66,4 +136,5 @@ export default () => {
   }
 
   fetchRss('https://ru.hexlet.io/lessons.rss')
+    })
 }

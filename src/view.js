@@ -31,7 +31,26 @@ export const renderText = (i18n) => {
   close.textContent = i18n.t('modal.close');
 };
 
+const renderFeeds = () => {
+
+}
+// const renderPosts = (contents) => {
+//
+// }
+const renderMessage = () => {
+
+}
+const renderRead = () => {
+
+}
+const renderModale = () => {
+
+}
+const handleProcess = () => {
+
+}
 export const renderPosts = (contents) => {
+  console.log(contents)
   const items = [...contents.querySelectorAll('item')];
   items.map(item => {
     const post = document.createElement('li');
@@ -51,4 +70,8 @@ export const renderPosts = (contents) => {
       elems.read.setAttribute('href', link);
     })
   })
+}
+
+export const handler = () => {
+
 }
