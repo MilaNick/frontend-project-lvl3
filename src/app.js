@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 import resources from './locales/index.js';
-import * as yup  from 'yup';
+import * as yup from 'yup';
 import _ from 'lodash';
 import onChange from 'on-change';
 import {handler, renderText} from './view.js'
@@ -28,10 +28,10 @@ const validate = (url, urls) => {
   return yup.string().url('mustBeValid').notOneOf(urls, 'rssExists').validate(url);
 };
 
-const  createPosts = (feedID, data) => (data
-  .items.reverse().map((post) => {
-    const { title, description, link } = post;
-    return { id: _.uniqueId(), feedID, title, description, link,}
+const createPosts = (feedID, data) => (
+  data.items.reverse().map((post) => {
+    const {title, description, link} = post;
+    return {id: _.uniqueId(), feedID, title, description, link,}
   })
 );
 
@@ -41,7 +41,7 @@ const createViewPost = (data) => (data.map((post) => ({postID: post.id, view: fa
 
 const updatePosts = (id, data, state) => {
   const posts = createPosts(id, data);
-  const viewPost =  createViewPost(posts);
+  const viewPost = createViewPost(posts);
   state.listOfPosts.push(...posts);
   state.viewPosts.push(...viewPost);
 }
@@ -50,7 +50,7 @@ const updateFeeds = (state) => {
   const promise = state.listOfFeeds.map((feed) => axios
     .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`)
     .then((response) => {
-      const { id } = feed;
+      const {id} = feed;
       const newPosts = parser(response.data.contents).items;
       const oldPosts = state.listOfPosts.filter((p) => p.feedID === id);
       const difference = _.differenceWith(
@@ -72,7 +72,7 @@ const updateFeeds = (state) => {
 
 const addFeed = (url, data, state) => {
   const dataFeed = createFeed(url, data);
-  const { id } = dataFeed;
+  const {id} = dataFeed;
   const dataPosts = createPosts(id, data);
   const dataView = createViewPost(dataPosts);
   state.urls.push(url);
@@ -99,42 +99,43 @@ export default () => {
         viewPosts: [],
         modal: null,
       };
-
-  const {loadResult, message, urls, listOfFeeds, listOfPosts, viewPosts, modal } = state;
-  const watchedState = onChange(state, handler);
-  const {form, input, btn, feedback, posts, ul, card, feeds } = elems;
-
-
-  form.addEventListener('submit', ((event) => {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const url = formData.get('url');
-    validate(url, state.urls)
-      .then((value) => {
-        input.classList.remove('is-invalid');
-        watchedState.listOfFeeds = [...listOfFeeds, value];
-        console.log('state', state)
+      const {loadResult, message, urls, listOfFeeds, listOfPosts, viewPosts, modal} = state;
+      const watchedState = onChange(state, handler);
+      const {form, input, btn, feedback, posts, ul, card, feeds} = elems;
+      form.addEventListener('submit', ((event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const url = formData.get('url');
+        validate(url, state.urls)
+          .then((link) => {
+            watchedState.loadResult = 'preloader';
+            return axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
+          })
+          .then((response) => {
+            const data = parser(response.data.contents);
+            addFeed(url, data, watchedState);
+            watchedState.loadResult = 'success';
+            watchedState.message = 'success';
+          })
+          .catch((error) => {
+            watchedState.loadResult = 'error';
+            if (error.message === 'Network Error') {
+              watchedState.message = 'networkError';
+            } else if (error.name === 'ValidationError') {
+              watchedState.message = error.message;
+            } else {
+              watchedState.message = 'notContainValid';
+            }
+          });
+      }))
+      elems.posts.addEventListener('click', (event) => {
+        if (!event.target.classList.contains('btn')) return;
+        const {id} = event.target.dataset;
+        if (id) {
+          const [reviewPost] = watchedState.posts.filter((post) => post.id === id);
+          watchedState.modal = reviewPost;
+          watchedState.viewPosts.push({postId: id, view: true});
+        }
       })
-      .catch((err) => {
-        console.log(err); // здесь обвести красной линией инпут если адрес невалидный, затем куда-то вывести сообщение
-        input.classList.add('is-invalid');
-      });
-    if (listOfFeeds.length !== 0) {
-      const li = document.createElement('li');
-      li.className = 'list-group-item d-flex justify-content-between align-items-start border-0 border-end-0';
-      li.innerHTML = '<a href = "https://ru.hexlet.io/courses/http-api/lessons/openapi/theory_unit" class = "fw-bold" data-id = "2" target = "_blank" rel = "noopener noreferrer" > OpenAPI(ранее Swagger Specification) / HTTP API </a><button type="button" className="btn btn-outline-primary btn-sm" data-id="2" data-bs-toggle="modal" data-bs-target="#modal">Просмотр</button>';
-      ul.append(li);
-    }
-    form.reset();
-  }));
-
-  const fetchRss = (url) => {
-    axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)
-      .then(response => parser(response.data.contents))
-      .then(contents => renderPosts(contents))
-      .catch(err => card.append(err))
-  }
-
-  fetchRss('https://ru.hexlet.io/lessons.rss')
     })
 }
