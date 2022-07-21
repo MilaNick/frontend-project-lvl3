@@ -13,6 +13,7 @@ export default {
     description: 'Начните читать RSS сегодня! Это легко, это красиво.',
     example: 'Пример: https://ru.hexlet.io/lessons.rss',
     placeholder: 'Ссылка RSS',
+    review: 'Просмотр',
     feeds: {
       title: 'Фиды',
     },

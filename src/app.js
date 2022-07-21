@@ -99,7 +99,6 @@ export default () => {
         viewPosts: [],
         modal: null,
       };
-      const {loadResult, message, urls, listOfFeeds, listOfPosts, viewPosts, modal} = state;
       const watchedState = onChange(state, handler);
       const {form, input, btn, feedback, posts, ul, card, feeds} = elems;
       form.addEventListener('submit', ((event) => {
@@ -139,4 +138,3 @@ export default () => {
       })
     })
 }
-

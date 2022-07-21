@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { elems } from './app.js'
+import {elems} from './app.js';
+import i18n from 'i18next';
 
 export const renderText = (i18n) => {
   const title = elems.header.querySelector('.display-3');
@@ -17,10 +18,6 @@ export const renderText = (i18n) => {
   const form = elems.header.querySelector('form');
   const placeholder = form.querySelector('[for="url-input"]');
   placeholder.textContent = i18n.t('placeholder');
-  const postsTitle = elems.main.querySelector('.posts-title');
-  postsTitle.textContent = i18n.t('posts.posting');
-  const feedsTitle = elems.main.querySelector('.feeds-title');
-  feedsTitle.textContent = i18n.t('feeds.title');
   const newLessons = elems.main.querySelector('.new-lessons');
   newLessons.textContent = i18n.t('posts.newLessons');
   const practicalLessons = elems.main.querySelector('.practical-lessons');
@@ -29,49 +26,103 @@ export const renderText = (i18n) => {
   elems.read.textContent = i18n.t('modal.read');
   const close = elems.modal.querySelector('.close-btn');
   close.textContent = i18n.t('modal.close');
-};
+};// прошерстить, многое уйдет в рендеры, не забыть
 
-const renderFeeds = () => {
-
-}
-// const renderPosts = (contents) => {
-//
+// const renderHTML = () => {
+//   return в рендерах много общего надо переписать
 // }
+const renderFeeds = (elems, feeds) => {
+  elems.feeds.innerHTML = null;
+  const card = document.createElement('div');
+  card.classList.add('card', 'border-0');
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
+  const cardTitle = document.createElement('h2');
+  cardTitle.classList.add('card-title', 'h4');
+  cardTitle.textContent = i18n.t('feeds.title');
+  const listGroup = document.createElement('ul');
+  listGroup.classList.add('list-group', 'border-0', 'rounded-0');
+  feeds.forEach((feed) => {
+    const listGroupItem = document.createElement('li');
+    listGroupItem.classList.add('list-group-item', 'border-0', 'border-end-0');
+    const h3 = document.createElement('h3');
+    h3.classList.add('h6', 'm-0');
+    h3.textContent = feed.title;
+    const p = document.createElement('p');
+    p.textContent = feed.description;
+    p.classList.add('m-0', 'small', 'text-black-50');
+
+    h3.append(p);
+    listGroupItem.append(h3);
+    listGroup.prepend(listGroupItem);
+  });
+  cardBody.append(cardTitle);
+  card.append(cardBody);
+  card.append(listGroup);
+  elems.feeds.append(card);
+};
+const renderPosts = (elems, posts) => {
+  elems.posts.innerHTML = null;
+  const card = document.createElement('div');
+  card.classList.add('card', 'border-0');
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
+  const cardTitle = document.createElement('h2');
+  cardTitle.classList.add('card-title', 'h4');
+  cardTitle.textContent = i18n.t('posts.posting');
+  const listGroup = document.createElement('ul');
+  listGroup.classList.add('list-group', 'border-0', 'rounded-0');
+  posts.forEach((post) => {
+    const { id, title } = post;
+    const btn = document.createElement('button');
+    btn.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    btn.dataset.id = id;
+    btn.dataset.bsToggle = 'modal';
+    btn.dataset.bsTarget = '#modal';
+    btn.textContent = i18n.t('review');
+    btn.setAttribute('type', 'button');
+    const listGroupItem = document.createElement('li');
+    listGroupItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+    const a = document.createElement('a');
+    a.textContent = title;
+    a.classList.add('fw-bold');
+    a.dataset.id = id;
+    a.setAttribute('href', post.link);
+    a.setAttribute('target', '_blank');
+
+    listGroupItem.append(a);
+    listGroupItem.append(btn);
+    listGroup.prepend(listGroupItem);
+  });
+  cardBody.append(cardTitle);
+  card.append(cardBody);
+  card.append(listGroup);
+  elems.feeds.append(card);
+};
 const renderMessage = () => {
 
 }
-const renderRead = () => {
+const renderView = () => {
 
 }
-const renderModale = () => {
+const renderModal = (elems, value) => {
+  const {title, description, link} = value;
+  elems.modalTitle.textContent = title;
+  elems.modalBody.textContent = description;
+  elems.read.setAttribute('href', link);
+}
+const handleLoader = () => {
+ // свитч на загрузку
+  //            loadResult = 'success';
+  //            message = 'success';
+  //            loadResult = 'error';
+  //             if (error.message === 'Network Error'
+  //               watchedState.message = 'networkError';
+  //               error.name === 'ValidationError'
+  //               watchedState.message = error.message;
+  //               watchedState.message = 'notContainValid';
 
 }
-const handleProcess = () => {
-
-}
-export const renderPosts = (contents) => {
-  console.log(contents)
-  const items = [...contents.querySelectorAll('item')];
-  items.map(item => {
-    const post = document.createElement('li');
-    post.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0')
-    const key = _.uniqueId();
-    const title = item.querySelector('title').innerHTML;
-    const link = item.querySelector('link').innerHTML;
-    const description = item.querySelector('description').innerHTML;
-    post.innerHTML = `<a href=${link} class="fw-bold" data-id="2" target="_blank" rel="noopener noreferrer">${title}</a>
-    <button type="button" class="btn btn-outline-primary btn-sm view-post" data-id="2" data-bs-toggle="modal" data-bs-target="#modal">Просмотр</button>`
-    post.setAttribute('id', key)
-    elems.ul.append(post);
-    const button = post.querySelector('.view-post');
-    button.addEventListener('click', () => {
-      elems.modalTitle.textContent = title;
-      elems.modalBody.textContent = description;
-      elems.read.setAttribute('href', link);
-    })
-  })
-}
-
 export const handler = () => {
 
 }
