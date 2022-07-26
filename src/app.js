@@ -3,7 +3,7 @@ import resources from './locales/index.js';
 import * as yup from 'yup';
 import _ from 'lodash';
 import onChange from 'on-change';
-import {handler, renderText} from './view.js'
+import handler from './view.js'
 import axios from 'axios'
 import parser from './parser.js'
 
@@ -16,20 +16,20 @@ export const elems = {
   main: document.querySelector('.main'),
   posts: document.querySelector('.posts'),
   ul: document.querySelector('.group-feeds'),
-  card: document.querySelector('.card'),
+  // card: document.querySelector('.card'),
   feeds: document.querySelector('.feeds'),
   modal: document.querySelector('.modal'),
   modalTitle: document.querySelector('.modal-title'),
   modalBody: document.querySelector('.modal-body'),
   read: document.querySelector('.read'),
+  btnLng: document.querySelector('.btn-group-sm'),
 }
 
 const validate = (url, urls) => {
   return yup.string().url('mustBeValid').notOneOf(urls, 'rssExists').validate(url);
 };
 
-const createPosts = (feedID, data) => (
-  data.items.reverse().map((post) => {
+const createPosts = (feedID, data) => (data.items.reverse().map((post) => {
     const {title, description, link} = post;
     return {id: _.uniqueId(), feedID, title, description, link,}
   })
@@ -80,11 +80,11 @@ const addFeed = (url, data, state) => {
   state.listOfPosts.push(...dataPosts);
   state.viewPosts.push(...dataView);
 }
-
+const defaultLng = 'ru';
 export default () => {
   const i18nextInstance = i18n.createInstance();
   i18nextInstance.init({
-    lng: 'ru',
+    lng: defaultLng,
     debug: false,
     resources,
   })
@@ -98,6 +98,7 @@ export default () => {
         listOfPosts: [],
         viewPosts: [],
         modal: null,
+        lnd: defaultLng,
       };
       const watchedState = onChange(state, handler);
       const {form, input, btn, feedback, posts, ul, card, feeds} = elems;
@@ -137,4 +138,5 @@ export default () => {
         }
       })
     })
+
 }

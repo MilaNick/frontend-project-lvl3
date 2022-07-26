@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import {elems} from './app.js';
+
 import i18n from 'i18next';
 
 export const renderText = (i18n) => {
@@ -7,30 +7,17 @@ export const renderText = (i18n) => {
   title.innerHTML = `<i class="bi bi-rss"></i>${i18n.t('titleHeader')}`;
   const lead = elems.header.querySelector('.lead');
   lead.textContent = i18n.t('description');
-  const urlInput = elems.header.querySelector('#url-input');
-  urlInput.setAttribute('placeholder', `${i18n.t('placeholder')}`);
-  const btn = elems.header.querySelector('.btn');
-  btn.innerHTML = `<i class="bi bi-rss"></i>${i18n.t('posts.button')}`;
+  const btn = elems.header.querySelector('.add');
+  btn.innerHTML = `<i class="bi bi-rss"></i>${i18n.t('button')}`;
   const example = elems.header.querySelector('.example');
   example.textContent = i18n.t('example');
-  const feedback = elems.header.querySelector('.feedback');
-  feedback.textContent = i18n.t('messages.success');
-  const form = elems.header.querySelector('form');
-  const placeholder = form.querySelector('[for="url-input"]');
+  const placeholder = elems.form.querySelector('[for="url-input"]');
   placeholder.textContent = i18n.t('placeholder');
-  const newLessons = elems.main.querySelector('.new-lessons');
-  newLessons.textContent = i18n.t('posts.newLessons');
-  const practicalLessons = elems.main.querySelector('.practical-lessons');
-  practicalLessons.textContent = i18n.t('posts.practicalLessons');
-  elems.modalTitle.textContent = i18n.t('modal.modalTitle');
   elems.read.textContent = i18n.t('modal.read');
   const close = elems.modal.querySelector('.close-btn');
   close.textContent = i18n.t('modal.close');
-};// прошерстить, многое уйдет в рендеры, не забыть
+};
 
-// const renderHTML = () => {
-//   return в рендерах много общего надо переписать
-// }
 const renderFeeds = (elems, feeds) => {
   elems.feeds.innerHTML = null;
   const card = document.createElement('div');
@@ -39,7 +26,7 @@ const renderFeeds = (elems, feeds) => {
   cardBody.classList.add('card-body');
   const cardTitle = document.createElement('h2');
   cardTitle.classList.add('card-title', 'h4');
-  cardTitle.textContent = i18n.t('feeds.title');
+  cardTitle.textContent = i18n.t('feeds');
   const listGroup = document.createElement('ul');
   listGroup.classList.add('list-group', 'border-0', 'rounded-0');
   feeds.forEach((feed) => {
@@ -61,6 +48,7 @@ const renderFeeds = (elems, feeds) => {
   card.append(listGroup);
   elems.feeds.append(card);
 };
+
 const renderPosts = (elems, posts) => {
   elems.posts.innerHTML = null;
   const card = document.createElement('div');
@@ -69,7 +57,7 @@ const renderPosts = (elems, posts) => {
   cardBody.classList.add('card-body');
   const cardTitle = document.createElement('h2');
   cardTitle.classList.add('card-title', 'h4');
-  cardTitle.textContent = i18n.t('posts.posting');
+  cardTitle.textContent = i18n.t('posting');
   const listGroup = document.createElement('ul');
   listGroup.classList.add('list-group', 'border-0', 'rounded-0');
   posts.forEach((post) => {
@@ -97,32 +85,106 @@ const renderPosts = (elems, posts) => {
   cardBody.append(cardTitle);
   card.append(cardBody);
   card.append(listGroup);
-  elems.feeds.append(card);
+  elems.posts.append(card);
 };
-const renderMessage = () => {
 
+const renderMessage = (elems, message) => {
+  elems.feedback.textContent = i18n.t(`messages.${message}`);
 }
-const renderView = () => {
 
-}
+const renderView = (data) => {
+  const viewPosts = data.filter((post) => post.view === true);
+  viewPosts.forEach((item) => {
+    const id = item.postId;
+    const link = document.querySelector(`[data-id="${id}"]`);
+    link.classList.remove('fw-bold');
+    link.classList.add('fw-normal');
+  });
+};
+
 const renderModal = (elems, value) => {
   const {title, description, link} = value;
   elems.modalTitle.textContent = title;
   elems.modalBody.textContent = description;
   elems.read.setAttribute('href', link);
 }
-const handleLoader = () => {
- // свитч на загрузку
-  //            loadResult = 'success';
-  //            message = 'success';
-  //            loadResult = 'error';
-  //             if (error.message === 'Network Error'
-  //               watchedState.message = 'networkError';
-  //               error.name === 'ValidationError'
-  //               watchedState.message = error.message;
-  //               watchedState.message = 'notContainValid';
 
+const changeLng = (elems, value, state) => {
+  const { message, listOfFeeds, listOfPosts, viewPosts } = state;
+  const view = viewPosts;
+  const lngBtn = document.querySelectorAll('.btn-outline-secondary');
+  lngBtn.forEach((btn) => btn.classList.remove('active'));
+  const activeBtn = document.querySelector(`[data-lng="${value}"]`);
+  activeBtn.classList.add('active');
+  i18n.changeLanguage(value);
+  renderText();
+  if (message) renderMessage(elems, message);
+  if (listOfFeeds.length > 0) {
+    renderFeeds(elems, listOfFeeds);
+    renderPosts(elems, listOfPosts);
+    renderView(view);
+  }
+};
+
+const handleLoader = (elems, loadResult) => {
+  switch (loadResult) {
+    case 'success':
+      elems.input.classList.remove('is-invalid');
+      elems.input.value = null;
+      elems.input.focus();
+      elems.input.removeAttribute('readonly');
+      elems.feedback.classList.remove('text-danger');
+      elems.feedback.classList.add('text-success');
+      elems.btn.disabled = false;
+      break;
+    case 'preloader':
+      elems.input.setAttribute('readonly', 'readonly');
+      elems.btn.disabled = true;
+      break;
+    case 'error':
+      elems.input.classList.add('is-invalid');
+      elems.input.focus();
+      elems.input.removeAttribute('readonly');
+      elems.feedback.classList.remove('text-success');
+      elems.feedback.classList.add('text-danger');
+      elems.btn.disabled = false;
+      break;
+    default:
+      break;
+  }
+};
+
+export default (path, value, state) => {
+  switch (path) {
+    case 'loadResult':
+      handleLoader(elems, value);
+      break;
+
+    case 'message':
+      renderMessage(elems, value);
+      break;
+
+    case 'listOfFeeds':
+      renderFeeds(elems, value);
+      break;
+
+    case 'listOfPosts':
+      renderPosts(elems, value);
+      break;
+
+    case 'modal':
+      renderModal(elems, value);
+      break;
+
+    case 'viewPosts':
+      renderView(value);
+      break;
+
+    case 'lng':
+      changeLng(elems, value, state);
+      break;
+
+    default:
+      break;
 }
-export const handler = () => {
-
 }

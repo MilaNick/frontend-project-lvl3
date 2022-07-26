@@ -14,19 +14,12 @@ export default {
     example: 'Пример: https://ru.hexlet.io/lessons.rss',
     placeholder: 'Ссылка RSS',
     review: 'Просмотр',
-    feeds: {
-      title: 'Фиды',
-    },
-    posts: {
-      posting: 'Посты',
-      button: 'Добавить',
-      newLessons: 'Новые уроки на Хекслете',
-      practicalLessons: 'Практические уроки по программированию',
-    },
+    feeds: 'Фиды',
+    posting: 'Посты',
+    button: 'Добавить',
     modal: {
       read: 'Читать далее',
       close: 'Закрыть',
-      modalTitle: '1Виды API / HTTP API',
     },
   },
 };
