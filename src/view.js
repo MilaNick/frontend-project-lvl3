@@ -2,7 +2,7 @@ import {elems} from './app.js';
 
 import i18n from 'i18next';
 
-export const renderText = (i18n) => {
+export const renderText = () => {
   const title = elems.header.querySelector('.display-3');
   title.innerHTML = `<i class="bi bi-rss"></i>${i18n.t('titleHeader')}`;
   const lead = elems.header.querySelector('.lead');
@@ -19,7 +19,7 @@ export const renderText = (i18n) => {
 };
 
 const renderFeeds = (elems, feeds) => {
-  elems.feeds.innerHTML = null;
+  // elems.feeds.innerHTML = null;
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
   const cardBody = document.createElement('div');
@@ -50,7 +50,7 @@ const renderFeeds = (elems, feeds) => {
 };
 
 const renderPosts = (elems, posts) => {
-  elems.posts.innerHTML = null;
+  // elems.posts.innerHTML = null;
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
   const cardBody = document.createElement('div');
@@ -116,6 +116,7 @@ const changeLng = (elems, value, state) => {
   lngBtn.forEach((btn) => btn.classList.remove('active'));
   const activeBtn = document.querySelector(`[data-lng="${value}"]`);
   activeBtn.classList.add('active');
+
   i18n.changeLanguage(value);
   renderText();
   if (message) renderMessage(elems, message);

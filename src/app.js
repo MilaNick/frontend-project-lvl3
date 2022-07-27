@@ -3,7 +3,7 @@ import resources from './locales/index.js';
 import * as yup from 'yup';
 import _ from 'lodash';
 import onChange from 'on-change';
-import handler from './view.js'
+import handler, { renderText, renderFeeds, renderPosts, renderMessage }from './view.js'
 import axios from 'axios'
 import parser from './parser.js'
 
@@ -52,14 +52,14 @@ const updateFeeds = (state) => {
     .then((response) => {
       const {id} = feed;
       const newPosts = parser(response.data.contents).items;
-      const oldPosts = state.listOfPosts.filter((p) => p.feedID === id);
-      const difference = _.differenceWith(
+      const oldPosts = state.listOfPosts.filter((post) => post.feedID === id);
+      const diff = _.differenceWith(
         newPosts, oldPosts, (a, b) => a.title === b.title,
       );
 
-      if (difference.length > 0) {
+      if (diff.length > 0) {
         const diffData = {
-          items: difference,
+          items: diff,
         };
         updatePosts(id, diffData, state);
       }
@@ -80,15 +80,17 @@ const addFeed = (url, data, state) => {
   state.listOfPosts.push(...dataPosts);
   state.viewPosts.push(...dataView);
 }
+
 const defaultLng = 'ru';
+
 export default () => {
-  const i18nextInstance = i18n.createInstance();
-  i18nextInstance.init({
+  // const i18nextInstance = i18n.createInstance();
+  i18n.init({
     lng: defaultLng,
     debug: false,
     resources,
   })
-    .then(() => renderText(i18nextInstance))
+    .then(() => renderText(i18n))
     .then(() => {
       const state = {
         loadResult: '',
@@ -98,11 +100,10 @@ export default () => {
         listOfPosts: [],
         viewPosts: [],
         modal: null,
-        lnd: defaultLng,
+        lng: defaultLng,
       };
       const watchedState = onChange(state, handler);
-      const {form, input, btn, feedback, posts, ul, card, feeds} = elems;
-      form.addEventListener('submit', ((event) => {
+      elems.form.addEventListener('submit', ((event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         const url = formData.get('url');
@@ -121,7 +122,7 @@ export default () => {
             watchedState.loadResult = 'error';
             if (error.message === 'Network Error') {
               watchedState.message = 'networkError';
-            } else if (error.name === 'ValidationError') {
+            } else if (error.message === 'ValidationError') {
               watchedState.message = error.message;
             } else {
               watchedState.message = 'notContainValid';
@@ -136,7 +137,12 @@ export default () => {
           watchedState.modal = reviewPost;
           watchedState.viewPosts.push({postId: id, view: true});
         }
-      })
+      });
+      elems.btnLng.addEventListener('click', (event) => {
+        event.preventDefault();
+        const {lng} = event.target.dataset;
+        if (lng) watchedState.lng = lng;
+      });
+      updateFeeds(watchedState);
     })
-
 }
