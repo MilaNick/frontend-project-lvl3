@@ -1,8 +1,8 @@
-import i18n from 'i18next';
+// import i18n from 'i18next';
 
 import { elems } from './app.js';
 
-export const renderText = () => {
+export const renderText = (i18n) => {
   const title = elems.header.querySelector('.display-3');
   title.innerHTML = `<i class="bi bi-rss"></i>${i18n.t('titleHeader')}`;
   const lead = elems.header.querySelector('.lead');
@@ -18,7 +18,7 @@ export const renderText = () => {
   close.textContent = i18n.t('modal.close');
 };
 
-const renderFeeds = (elems, feeds) => {
+const renderFeeds = (elems, feeds, i18n) => {
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
   const cardBody = document.createElement('div');
@@ -48,7 +48,7 @@ const renderFeeds = (elems, feeds) => {
   elems.feeds.append(card);
 };
 
-const renderPosts = (elems, posts) => {
+const renderPosts = (elems, posts, i18n) => {
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
   const cardBody = document.createElement('div');
@@ -86,7 +86,7 @@ const renderPosts = (elems, posts) => {
   elems.posts.append(card);
 };
 
-const renderMessage = (elems, message) => {
+const renderMessage = (elems, message, i18n) => {
   elems.feedback.textContent = i18n.t(`messages.${message}`);
 };
 
@@ -107,7 +107,7 @@ const renderModal = (elems, value) => {
   elems.read.setAttribute('href', link);
 };
 
-const changeLng = (elems, value, state) => {
+const changeLng = (elems, value, state, i18n) => {
   const {
     message, listOfFeeds, listOfPosts, viewPosts,
   } = state;
@@ -118,11 +118,11 @@ const changeLng = (elems, value, state) => {
   activeBtn.classList.add('active');
 
   i18n.changeLanguage(value);
-  renderText();
-  if (message) renderMessage(elems, message);
+  renderText(i18n);
+  if (message) renderMessage(elems, message, i18n);
   if (listOfFeeds.length > 0) {
-    renderFeeds(elems, listOfFeeds);
-    renderPosts(elems, listOfPosts);
+    renderFeeds(elems, listOfFeeds, i18n);
+    renderPosts(elems, listOfPosts, i18n);
     renderView(view);
   }
 };
@@ -155,26 +155,26 @@ const handleLoader = (elems, loadResult) => {
   }
 };
 
-export default (path, value, state) => {
+export default (state, i18n) => (path, value) => {
   switch (path) {
     case 'loadResult':
       handleLoader(elems, value);
       break;
 
     case 'message':
-      renderMessage(elems, value);
+      renderMessage(elems, value, i18n);
       break;
 
     case 'listOfFeeds':
-      renderFeeds(elems, value);
+      renderFeeds(elems, value, i18n);
       break;
 
     case 'listOfPosts':
-      renderPosts(elems, value);
+      renderPosts(elems, value, i18n);
       break;
 
     case 'modal':
-      renderModal(elems, value);
+      renderModal(elems, value, i18n);
       break;
 
     case 'viewPosts':
@@ -182,7 +182,7 @@ export default (path, value, state) => {
       break;
 
     case 'lng':
-      changeLng(elems, value, state);
+      changeLng(elems, value, state, i18n);
       break;
 
     default:

@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import _ from 'lodash';
 import onChange from 'on-change';
 import resources from './locales/index.js';
-import handler, { renderText } from './view.js';
+import getHandler, { renderText } from './view.js';
 import parser from './parser.js';
 
 export const elems = {
@@ -82,13 +82,13 @@ const addFeed = (url, data, state) => {
 const defaultLng = 'ru';
 
 export default () => {
-  // const i18nextInstance = i18n.createInstance();
-  i18n.init({
+  const i18nextInstance = i18n.createInstance();
+  i18nextInstance.init({
     lng: defaultLng,
     debug: false,
     resources,
   })
-    .then(() => renderText(i18n))
+    .then(() => renderText(i18nextInstance))
     .then(() => {
       const state = {
         loadResult: '',
@@ -100,7 +100,7 @@ export default () => {
         modal: null,
         lng: defaultLng,
       };
-      const watchedState = onChange(state, handler);
+      const watchedState = onChange(state, getHandler(state, i18nextInstance));
       elems.form.addEventListener('submit', ((event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
