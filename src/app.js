@@ -1,11 +1,11 @@
+import axios from 'axios';
 import i18n from 'i18next';
-import resources from './locales/index.js';
 import * as yup from 'yup';
 import _ from 'lodash';
 import onChange from 'on-change';
-import handler, { renderText, renderFeeds, renderPosts, renderMessage }from './view.js'
-import axios from 'axios'
-import parser from './parser.js'
+import resources from './locales/index.js';
+import handler, { renderText } from './view.js';
+import parser from './parser.js';
 
 export const elems = {
   header: document.querySelector('.header'),
@@ -23,34 +23,32 @@ export const elems = {
   modalBody: document.querySelector('.modal-body'),
   read: document.querySelector('.read'),
   btnLng: document.querySelector('.btn-group-sm'),
-}
-
-const validate = (url, urls) => {
-  return yup.string().url('mustBeValid').notOneOf(urls, 'rssExists').validate(url);
 };
 
+const validate = (url, urls) => yup.string().url('mustBeValid').notOneOf(urls, 'rssExists').validate(url);
+
 const createPosts = (feedID, data) => (data.items.reverse().map((post) => {
-    const {title, description, link} = post;
-    return {id: _.uniqueId(), feedID, title, description, link,}
-  })
+  const { title, description, link } = post;
+  return { id: _.uniqueId(), feedID, title, description, link };
+})
 );
 
-const createFeed = (url, data) => ({id: _.uniqueId(), url, title: data.title, description: data.description,});
+const createFeed = (url, data) => ({ id: _.uniqueId(), url, title: data.title, description: data.description });
 
-const createViewPost = (data) => (data.map((post) => ({postID: post.id, view: false})))
+const createViewPost = (data) => (data.map((post) => ({ postID: post.id, view: false })));
 
 const updatePosts = (id, data, state) => {
   const posts = createPosts(id, data);
   const viewPost = createViewPost(posts);
   state.listOfPosts.push(...posts);
   state.viewPosts.push(...viewPost);
-}
+};
 
 const updateFeeds = (state) => {
   const promise = state.listOfFeeds.map((feed) => axios
     .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`)
     .then((response) => {
-      const {id} = feed;
+      const { id } = feed;
       const newPosts = parser(response.data.contents).items;
       const oldPosts = state.listOfPosts.filter((post) => post.feedID === id);
       const diff = _.differenceWith(
@@ -72,14 +70,14 @@ const updateFeeds = (state) => {
 
 const addFeed = (url, data, state) => {
   const dataFeed = createFeed(url, data);
-  const {id} = dataFeed;
+  const { id } = dataFeed;
   const dataPosts = createPosts(id, data);
   const dataView = createViewPost(dataPosts);
   state.urls.push(url);
   state.listOfFeeds.push(dataFeed);
   state.listOfPosts.push(...dataPosts);
   state.viewPosts.push(...dataView);
-}
+};
 
 const defaultLng = 'ru';
 
@@ -110,7 +108,7 @@ export default () => {
         validate(url, state.urls)
           .then((link) => {
             watchedState.loadResult = 'preloader';
-            return axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`)
+            return axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(link)}`);
           })
           .then((response) => {
             const data = parser(response.data.contents);
@@ -128,21 +126,21 @@ export default () => {
               watchedState.message = 'notContainValid';
             }
           });
-      }))
+      }));
       elems.posts.addEventListener('click', (event) => {
         if (!event.target.classList.contains('btn')) return;
-        const {id} = event.target.dataset;
+        const { id } = event.target.dataset;
         if (id) {
           const [reviewPost] = watchedState.posts.filter((post) => post.id === id);
           watchedState.modal = reviewPost;
-          watchedState.viewPosts.push({postId: id, view: true});
+          watchedState.viewPosts.push({ postId: id, view: true });
         }
       });
       elems.btnLng.addEventListener('click', (event) => {
         event.preventDefault();
-        const {lng} = event.target.dataset;
+        const { lng } = event.target.dataset;
         if (lng) watchedState.lng = lng;
       });
       updateFeeds(watchedState);
-    })
-}
+    });
+};

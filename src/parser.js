@@ -1,4 +1,4 @@
-export default (contents, type = "application/xml") => {
+export default (contents, type = 'application/xml') => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(contents, type);
   const err = doc.querySelector('parserError');
@@ -12,7 +12,7 @@ export default (contents, type = "application/xml") => {
     const title = item.querySelector('title').innerHTML;
     const description = item.querySelector('description').innerHTML;
     const link = item.querySelector('link').innerHTML;
-    return {title, description, link,};
+    return { title, description, link };
   });
-  return {title, description, items};
-}
+  return { title, description, items };
+};

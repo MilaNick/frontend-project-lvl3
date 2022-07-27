@@ -1,6 +1,6 @@
-import {elems} from './app.js';
-
 import i18n from 'i18next';
+
+import { elems } from './app.js';
 
 export const renderText = () => {
   const title = elems.header.querySelector('.display-3');
@@ -19,7 +19,6 @@ export const renderText = () => {
 };
 
 const renderFeeds = (elems, feeds) => {
-  // elems.feeds.innerHTML = null;
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
   const cardBody = document.createElement('div');
@@ -50,7 +49,6 @@ const renderFeeds = (elems, feeds) => {
 };
 
 const renderPosts = (elems, posts) => {
-  // elems.posts.innerHTML = null;
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
   const cardBody = document.createElement('div');
@@ -90,7 +88,7 @@ const renderPosts = (elems, posts) => {
 
 const renderMessage = (elems, message) => {
   elems.feedback.textContent = i18n.t(`messages.${message}`);
-}
+};
 
 const renderView = (data) => {
   const viewPosts = data.filter((post) => post.view === true);
@@ -103,14 +101,16 @@ const renderView = (data) => {
 };
 
 const renderModal = (elems, value) => {
-  const {title, description, link} = value;
+  const { title, description, link } = value;
   elems.modalTitle.textContent = title;
   elems.modalBody.textContent = description;
   elems.read.setAttribute('href', link);
-}
+};
 
 const changeLng = (elems, value, state) => {
-  const { message, listOfFeeds, listOfPosts, viewPosts } = state;
+  const {
+    message, listOfFeeds, listOfPosts, viewPosts,
+  } = state;
   const view = viewPosts;
   const lngBtn = document.querySelectorAll('.btn-outline-secondary');
   lngBtn.forEach((btn) => btn.classList.remove('active'));
@@ -187,5 +187,5 @@ export default (path, value, state) => {
 
     default:
       break;
-}
-}
+  }
+};
