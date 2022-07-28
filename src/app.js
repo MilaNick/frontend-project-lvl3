@@ -24,7 +24,8 @@ export const elems = {
   btnLng: document.querySelector('.btn-group-sm'),
 };
 
-const validate = (url, urls) => yup.string().trim().url('mustBeValid').notOneOf(urls, 'rssExists').validate(url);
+const validate = (url, urls) => yup.string().trim().required().url().notOneOf(urls, 'rssExists')
+  .validate(url);
 
 const createPosts = (feedID, data) => (data.items.reverse().map((post) => {
   const { title, description, link } = post;
@@ -51,7 +52,7 @@ const updateFeeds = (state) => {
       const newPosts = parser(response.data.contents).items;
       const oldPosts = state.listOfPosts.filter((post) => post.feedID === id);
       const diff = _.differenceWith(
-        newPosts, oldPosts, (a, b) => a.title === b.title,
+        newPosts, oldPosts, (a, b) => a.link === b.link,
       );
 
       if (diff.length > 0) {
@@ -116,13 +117,22 @@ export default () => {
             watchedState.message = 'success';
           })
           .catch((error) => {
+            console.dir(error)
+            console.log('error.message', error.message)
             watchedState.loadResult = 'error';
             if (error.message === 'Network Error') {
               watchedState.message = 'networkError';
-            } else if (error.message === 'ValidationError') {
-              watchedState.message = error.message;
-            } else {
+            } else if (error.message === 'mustBeValid') {
+              watchedState.message = 'mustBeValid';
+            } else if (error.message === 'rssExists') {
+              watchedState.message = 'rssExists';
+            } else if (error.message === 'Cannot read properties of null (reading \'textContent\')') {
               watchedState.message = 'notContainValid';
+            } else if (error.message === 'this is a required field') {
+              watchedState.message = 'required';
+            }
+            else {
+              watchedState.message = 'default';
             }
           });
       }));
