@@ -16,7 +16,6 @@ export const elems = {
   main: document.querySelector('.main'),
   posts: document.querySelector('.posts'),
   ul: document.querySelector('.group-feeds'),
-  // card: document.querySelector('.card'),
   feeds: document.querySelector('.feeds'),
   modal: document.querySelector('.modal'),
   modalTitle: document.querySelector('.modal-title'),
@@ -25,7 +24,7 @@ export const elems = {
   btnLng: document.querySelector('.btn-group-sm'),
 };
 
-const validate = (url, urls) => yup.string().url('mustBeValid').notOneOf(urls, 'rssExists').validate(url);
+const validate = (url, urls) => yup.string().trim().url('mustBeValid').notOneOf(urls, 'rssExists').validate(url);
 
 const createPosts = (feedID, data) => (data.items.reverse().map((post) => {
   const { title, description, link } = post;
@@ -128,11 +127,10 @@ export default () => {
           });
       }));
       elems.posts.addEventListener('click', (event) => {
-        if (!event.target.classList.contains('btn')) return;
         const { id } = event.target.dataset;
         if (id) {
-          const [reviewPost] = watchedState.posts.filter((post) => post.id === id);
-          watchedState.modal = reviewPost;
+          const [review] = watchedState.listOfPosts.filter((post) => post.id === id);
+          watchedState.modal = review;
           watchedState.viewPosts.push({ postId: id, view: true });
         }
       });

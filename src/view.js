@@ -19,6 +19,7 @@ export const renderText = (i18n) => {
 };
 
 const renderFeeds = (elems, feeds, i18n) => {
+  elems.feeds.innerHTML = null;
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
   const cardBody = document.createElement('div');
@@ -49,6 +50,7 @@ const renderFeeds = (elems, feeds, i18n) => {
 };
 
 const renderPosts = (elems, posts, i18n) => {
+  elems.posts.innerHTML = null;
   const card = document.createElement('div');
   card.classList.add('card', 'border-0');
   const cardBody = document.createElement('div');
@@ -96,14 +98,14 @@ const renderView = (data) => {
     const id = item.postId;
     const link = document.querySelector(`[data-id="${id}"]`);
     link.classList.remove('fw-bold');
-    link.classList.add('fw-normal');
+    link.classList.add('fw-normal', 'fw-normal-grey');
   });
 };
 
 const renderModal = (elems, value) => {
   const { title, description, link } = value;
-  elems.modalTitle.textContent = title;
-  elems.modalBody.textContent = description;
+  elems.modalTitle.innerHTML = title;
+  elems.modalBody.innerHTML = description;
   elems.read.setAttribute('href', link);
 };
 
@@ -116,7 +118,6 @@ const changeLng = (elems, value, state, i18n) => {
   lngBtn.forEach((btn) => btn.classList.remove('active'));
   const activeBtn = document.querySelector(`[data-lng="${value}"]`);
   activeBtn.classList.add('active');
-
   i18n.changeLanguage(value);
   renderText(i18n);
   if (message) renderMessage(elems, message, i18n);
@@ -174,7 +175,7 @@ export default (state, i18n) => (path, value) => {
       break;
 
     case 'modal':
-      renderModal(elems, value, i18n);
+      renderModal(elems, value);
       break;
 
     case 'viewPosts':

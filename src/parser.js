@@ -3,16 +3,16 @@ export default (contents, type = 'application/xml') => {
   const doc = parser.parseFromString(contents, type);
   const err = doc.querySelector('parserError');
   if (err) {
-    throw new Error(err.innerHTML);
+    throw new Error(err.textContent);
   }
-  const title = doc.querySelector('title').innerHTML;
-  const description = doc.querySelector('description').innerHTML;
-  const postElems = Array.from(doc.querySelectorAll('item'));
+  const title = doc.querySelector('title').textContent;
+  const description = doc.querySelector('description').textContent;
+  const postElems = [...doc.querySelectorAll('item')];
   const items = postElems.map((item) => {
-    const title = item.querySelector('title').innerHTML;
-    const description = item.querySelector('description').innerHTML;
-    const link = item.querySelector('link').innerHTML;
-    return { title, description, link };
+    const titlePost = item.querySelector('title').textContent;
+    const descriptionPost = item.querySelector('description').textContent;
+    const link = item.querySelector('link').textContent;
+    return { title: titlePost, description: descriptionPost, link };
   });
   return { title, description, items };
 };
