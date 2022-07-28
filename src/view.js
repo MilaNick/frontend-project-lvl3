@@ -1,5 +1,3 @@
-// import i18n from 'i18next';
-
 import { elems } from './app.js';
 
 export const renderText = (i18n) => {
@@ -16,37 +14,6 @@ export const renderText = (i18n) => {
   elems.read.textContent = i18n.t('modal.read');
   const close = elems.modal.querySelector('.close-btn');
   close.textContent = i18n.t('modal.close');
-};
-
-const renderFeeds = (elems, feeds, i18n) => {
-  elems.feeds.innerHTML = null;
-  const card = document.createElement('div');
-  card.classList.add('card', 'border-0');
-  const cardBody = document.createElement('div');
-  cardBody.classList.add('card-body');
-  const cardTitle = document.createElement('h2');
-  cardTitle.classList.add('card-title', 'h4');
-  cardTitle.textContent = i18n.t('feeds');
-  const listGroup = document.createElement('ul');
-  listGroup.classList.add('list-group', 'border-0', 'rounded-0');
-  feeds.forEach((feed) => {
-    const listGroupItem = document.createElement('li');
-    listGroupItem.classList.add('list-group-item', 'border-0', 'border-end-0');
-    const h3 = document.createElement('h3');
-    h3.classList.add('h6', 'm-0');
-    h3.textContent = feed.title;
-    const p = document.createElement('p');
-    p.textContent = feed.description;
-    p.classList.add('m-0', 'small', 'text-black-50');
-
-    h3.append(p);
-    listGroupItem.append(h3);
-    listGroup.prepend(listGroupItem);
-  });
-  cardBody.append(cardTitle);
-  card.append(cardBody);
-  card.append(listGroup);
-  elems.feeds.append(card);
 };
 
 const renderPosts = (elems, posts, i18n) => {
@@ -86,6 +53,37 @@ const renderPosts = (elems, posts, i18n) => {
   card.append(cardBody);
   card.append(listGroup);
   elems.posts.append(card);
+};
+
+const renderFeeds = (elems, feeds, i18n) => {
+  elems.feeds.innerHTML = null;
+  const card = document.createElement('div');
+  card.classList.add('card', 'border-0');
+  const cardBody = document.createElement('div');
+  cardBody.classList.add('card-body');
+  const cardTitle = document.createElement('h2');
+  cardTitle.classList.add('card-title', 'h4');
+  cardTitle.textContent = i18n.t('feeds');
+  const listGroup = document.createElement('ul');
+  listGroup.classList.add('list-group', 'border-0', 'rounded-0');
+  feeds.forEach((feed) => {
+    const listGroupItem = document.createElement('li');
+    listGroupItem.classList.add('list-group-item', 'border-0', 'border-end-0');
+    const h3 = document.createElement('h3');
+    h3.classList.add('h6', 'm-0');
+    h3.textContent = feed.title;
+    const p = document.createElement('p');
+    p.textContent = feed.description;
+    p.classList.add('m-0', 'small', 'text-black-50');
+
+    h3.append(p);
+    listGroupItem.append(h3);
+    listGroup.prepend(listGroupItem);
+  });
+  cardBody.append(cardTitle);
+  card.append(cardBody);
+  card.append(listGroup);
+  elems.feeds.append(card);
 };
 
 const renderMessage = (elems, message, i18n) => {
@@ -162,24 +160,24 @@ export default (state, i18n) => (path, value) => {
       handleLoader(elems, value);
       break;
 
-    case 'message':
-      renderMessage(elems, value, i18n);
+    case 'listOfPosts':
+      renderPosts(elems, value, i18n);
+      break;
+
+    case 'viewPosts':
+      renderView(value);
       break;
 
     case 'listOfFeeds':
       renderFeeds(elems, value, i18n);
       break;
 
-    case 'listOfPosts':
-      renderPosts(elems, value, i18n);
+    case 'message':
+      renderMessage(elems, value, i18n);
       break;
 
     case 'modal':
       renderModal(elems, value);
-      break;
-
-    case 'viewPosts':
-      renderView(value);
       break;
 
     case 'lng':

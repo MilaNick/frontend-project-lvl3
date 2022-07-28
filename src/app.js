@@ -24,19 +24,15 @@ export const elems = {
   btnLng: document.querySelector('.btn-group-sm'),
 };
 
-const validate = (url, urls) => yup.string().trim().required().url().notOneOf(urls, 'rssExists')
+const validate = (url, urls) => yup.string().trim().required().url('mustBeValid')
+  .notOneOf(urls, 'rssExists')
   .validate(url);
 
 const createPosts = (feedID, data) => (data.items.reverse().map((post) => {
   const { title, description, link } = post;
   return { id: _.uniqueId(), feedID, title, description, link };
-})
-);
-
-const createFeed = (url, data) => ({ id: _.uniqueId(), url, title: data.title, description: data.description });
-
+}));
 const createViewPost = (data) => (data.map((post) => ({ postID: post.id, view: false })));
-
 const updatePosts = (id, data, state) => {
   const posts = createPosts(id, data);
   const viewPost = createViewPost(posts);
@@ -44,6 +40,7 @@ const updatePosts = (id, data, state) => {
   state.viewPosts.push(...viewPost);
 };
 
+const createFeed = (url, data) => ({ id: _.uniqueId(), url, title: data.title, description: data.description });
 const updateFeeds = (state) => {
   const promise = state.listOfFeeds.map((feed) => axios
     .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`)
@@ -56,10 +53,10 @@ const updateFeeds = (state) => {
       );
 
       if (diff.length > 0) {
-        const diffData = {
+        const data = {
           items: diff,
         };
-        updatePosts(id, diffData, state);
+        updatePosts(id, data, state);
       }
     })
     .catch((err) => {
@@ -67,7 +64,6 @@ const updateFeeds = (state) => {
     }));
   Promise.all(promise).finally(() => setTimeout(() => updateFeeds(state), 5000));
 };
-
 const addFeed = (url, data, state) => {
   const dataFeed = createFeed(url, data);
   const { id } = dataFeed;
@@ -117,22 +113,25 @@ export default () => {
             watchedState.message = 'success';
           })
           .catch((error) => {
-            console.dir(error)
-            console.log('error.message', error.message)
             watchedState.loadResult = 'error';
-            if (error.message === 'Network Error') {
-              watchedState.message = 'networkError';
-            } else if (error.message === 'mustBeValid') {
-              watchedState.message = 'mustBeValid';
-            } else if (error.message === 'rssExists') {
-              watchedState.message = 'rssExists';
-            } else if (error.message === 'Cannot read properties of null (reading \'textContent\')') {
-              watchedState.message = 'notContainValid';
-            } else if (error.message === 'this is a required field') {
-              watchedState.message = 'required';
-            }
-            else {
-              watchedState.message = 'default';
+            switch (error.message) {
+              case ('Network Error'):
+                watchedState.message = 'networkError';
+                break;
+              case ('mustBeValid'):
+                watchedState.message = 'mustBeValid';
+                break;
+              case ('rssExists'):
+                watchedState.message = 'rssExists';
+                break;
+              case ('Cannot read properties of null (reading \'textContent\')'):
+                watchedState.message = 'notContainValid';
+                break;
+              case ('this is a required field'):
+                watchedState.message = 'required';
+                break;
+              default:
+                watchedState.message = 'default';
             }
           });
       }));
