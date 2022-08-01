@@ -52,9 +52,7 @@ const updateFeeds = (state) => {
       const { id } = feed;
       const newPosts = parser(response.data.contents).items;
       const oldPosts = state.listOfPosts.filter((post) => post.feedID === id);
-      const diff = _.differenceWith(
-        newPosts, oldPosts, (a, b) => a.link === b.link,
-      );
+      const diff = _.differenceWith(newPosts, oldPosts, (a, b) => a.link === b.link);
 
       if (diff.length > 0) {
         const data = {
