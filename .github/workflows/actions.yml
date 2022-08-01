@@ -35,10 +35,3 @@ jobs:
       - name: Run linter
         # Run Linter
         run: make lint
-        uses: paambaati/codeclimate-action@v2.7.4
-        # Add Code Climate secret key
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.PROJECT3 }}
-        with:
-          coverageCommand: make test-coverage
-          debug: true
