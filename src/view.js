@@ -1,6 +1,21 @@
-import { elems } from './app.js';
+const elements = {
+  header: document.querySelector('.header'),
+  form: document.querySelector('.rss-form'),
+  input: document.getElementById('url-input'),
+  btn: document.querySelector('[aria-label="add"]'),
+  feedback: document.querySelector('.feedback'),
+  main: document.querySelector('.main'),
+  posts: document.querySelector('.posts'),
+  ul: document.querySelector('.group-feeds'),
+  feeds: document.querySelector('.feeds'),
+  modal: document.querySelector('.modal'),
+  modalTitle: document.querySelector('.modal-title'),
+  modalBody: document.querySelector('.modal-body'),
+  read: document.querySelector('.read'),
+  btnLng: document.querySelector('.btn-group-sm'),
+};
 
-export const renderText = (i18n) => {
+export const renderText = (i18n, elems) => {
   const title = elems.header.querySelector('.display-3');
   title.innerHTML = `<i class="bi bi-rss"></i>${i18n.t('titleHeader')}`;
   const lead = elems.header.querySelector('.lead');
@@ -117,7 +132,7 @@ const changeLng = (elems, value, state, i18n) => {
   const activeBtn = document.querySelector(`[data-lng="${value}"]`);
   activeBtn.classList.add('active');
   i18n.changeLanguage(value);
-  renderText(i18n);
+  renderText(i18n, elems);
   if (message) renderMessage(elems, message, i18n);
   if (listOfFeeds.length > 0) {
     renderFeeds(elems, listOfFeeds, i18n);
@@ -157,11 +172,11 @@ const handleLoader = (elems, loadResult) => {
 export default (state, i18n) => (path, value) => {
   switch (path) {
     case 'loadResult':
-      handleLoader(elems, value);
+      handleLoader(elements, value);
       break;
 
     case 'listOfPosts':
-      renderPosts(elems, value, i18n);
+      renderPosts(elements, value, i18n);
       break;
 
     case 'viewPosts':
@@ -169,19 +184,19 @@ export default (state, i18n) => (path, value) => {
       break;
 
     case 'listOfFeeds':
-      renderFeeds(elems, value, i18n);
+      renderFeeds(elements, value, i18n);
       break;
 
     case 'message':
-      renderMessage(elems, value, i18n);
+      renderMessage(elements, value, i18n);
       break;
 
     case 'modal':
-      renderModal(elems, value);
+      renderModal(elements, value);
       break;
 
     case 'lng':
-      changeLng(elems, value, state, i18n);
+      changeLng(elements, value, state, i18n);
       break;
 
     default:

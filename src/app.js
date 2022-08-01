@@ -7,7 +7,7 @@ import resources from './locales/index.js';
 import getHandler, { renderText } from './view.js';
 import parser from './parser.js';
 
-export const elems = {
+const elements = {
   header: document.querySelector('.header'),
   form: document.querySelector('.rss-form'),
   input: document.getElementById('url-input'),
@@ -30,7 +30,9 @@ const validate = (url, urls) => yup.string().trim().required().url('mustBeValid'
 
 const createPosts = (feedID, data) => (data.items.reverse().map((post) => {
   const { title, description, link } = post;
-  return { id: _.uniqueId(), feedID, title, description, link };
+  return {
+    id: _.uniqueId(), feedID, title, description, link,
+  };
 }));
 const createViewPost = (data) => (data.map((post) => ({ postID: post.id, view: false })));
 const updatePosts = (id, data, state) => {
@@ -40,7 +42,9 @@ const updatePosts = (id, data, state) => {
   state.viewPosts.push(...viewPost);
 };
 
-const createFeed = (url, data) => ({ id: _.uniqueId(), url, title: data.title, description: data.description });
+const createFeed = (url, data) => ({
+  id: _.uniqueId(), url, title: data.title, description: data.description,
+});
 const updateFeeds = (state) => {
   const promise = state.listOfFeeds.map((feed) => axios
     .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`)
@@ -84,7 +88,7 @@ export default () => {
     debug: false,
     resources,
   })
-    .then(() => renderText(i18nextInstance))
+    .then(() => renderText(i18nextInstance, elements))
     .then(() => {
       const state = {
         loadResult: '',
@@ -97,7 +101,7 @@ export default () => {
         lng: defaultLng,
       };
       const watchedState = onChange(state, getHandler(state, i18nextInstance));
-      elems.form.addEventListener('submit', ((event) => {
+      elements.form.addEventListener('submit', ((event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
         const url = formData.get('url');
@@ -135,7 +139,7 @@ export default () => {
             }
           });
       }));
-      elems.posts.addEventListener('click', (event) => {
+      elements.posts.addEventListener('click', (event) => {
         const { id } = event.target.dataset;
         if (id) {
           const [review] = watchedState.listOfPosts.filter((post) => post.id === id);
@@ -143,7 +147,7 @@ export default () => {
           watchedState.viewPosts.push({ postId: id, view: true });
         }
       });
-      elems.btnLng.addEventListener('click', (event) => {
+      elements.btnLng.addEventListener('click', (event) => {
         event.preventDefault();
         const { lng } = event.target.dataset;
         if (lng) watchedState.lng = lng;
