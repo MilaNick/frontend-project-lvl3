@@ -7,9 +7,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack serve",
     "dev": "cross-env NODE_ENV=development webpack",
-    "build": "cross-env NODE_ENV=production webpack",
-    "test": "npx jest",
-    "test:watch": "npx jest --watch"
+    "build": "cross-env NODE_ENV=production webpack"
   },
   "browserslist": [
     "last 2 versions",
@@ -55,8 +53,6 @@
     "file-loader": "^6.2.0",
     "html-loader": "^3.1.0",
     "html-webpack-plugin": "^5.5.0",
-    "jest": "^27.1.1",
-    "jest-cli": "^27.1.1",
     "mini-css-extract-plugin": "^2.5.3",
     "postcss": "^8.4.6",
     "postcss-loader": "^6.2.1",
