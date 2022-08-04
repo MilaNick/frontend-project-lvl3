@@ -2,11 +2,10 @@ export default {
   translation: {
     messages: {
       mustBeValid: 'Ссылка должна быть валидным URL',
-      notContainValid: 'Ресурс не содержит валидный RSS',
-      required: 'Не должно быть пустым',
+      'Cannot read properties of null (reading \'textContent\')': 'Ресурс не содержит валидный RSS',
+      'this is a required field': 'Не должно быть пустым',
       rssExists: 'RSS уже существует',
-      default: 'Что-то пошло не так.',
-      networkError: 'Ошибка сети',
+      'Network Error': 'Ошибка сети',
       success: 'RSS успешно загружен',
     },
     titleHeader: 'RSS агрегатор',

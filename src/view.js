@@ -124,7 +124,7 @@ const renderModal = (elems, value) => {
 
 const changeLng = (elems, value, state, i18n) => {
   const {
-    message, listOfFeeds, listOfPosts, viewPosts,
+    message, feeds, posts, viewPosts,
   } = state;
   const view = viewPosts;
   const lngBtn = document.querySelectorAll('.btn-outline-secondary');
@@ -134,15 +134,15 @@ const changeLng = (elems, value, state, i18n) => {
   i18n.changeLanguage(value);
   renderText(i18n, elems);
   if (message) renderMessage(elems, message, i18n);
-  if (listOfFeeds.length > 0) {
-    renderFeeds(elems, listOfFeeds, i18n);
-    renderPosts(elems, listOfPosts, i18n);
+  if (feeds.length > 0) {
+    renderFeeds(elems, feeds, i18n);
+    renderPosts(elems, posts, i18n);
     renderView(view);
   }
 };
 
-const handleLoader = (elems, loadResult) => {
-  switch (loadResult) {
+const handleLoader = (elems, processing) => {
+  switch (processing) {
     case 'success':
       elems.input.classList.remove('is-invalid');
       elems.input.value = null;
@@ -152,7 +152,7 @@ const handleLoader = (elems, loadResult) => {
       elems.feedback.classList.add('text-success');
       elems.btn.disabled = false;
       break;
-    case 'preloader':
+    case 'addition':
       elems.input.setAttribute('readonly', 'readonly');
       elems.btn.disabled = true;
       break;
@@ -171,11 +171,11 @@ const handleLoader = (elems, loadResult) => {
 
 export default (state, i18n) => (path, value) => {
   switch (path) {
-    case 'loadResult':
+    case 'processing':
       handleLoader(elements, value);
       break;
 
-    case 'listOfPosts':
+    case 'posts':
       renderPosts(elements, value, i18n);
       break;
 
@@ -183,7 +183,7 @@ export default (state, i18n) => (path, value) => {
       renderView(value);
       break;
 
-    case 'listOfFeeds':
+    case 'feeds':
       renderFeeds(elements, value, i18n);
       break;
 
