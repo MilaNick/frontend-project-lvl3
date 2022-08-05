@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import _ from 'lodash';
 import onChange from 'on-change';
 import resources from './locales/index.js';
-import getHandler, { renderText } from './view.js';
+import getHandler, { renderText, getElements } from './view.js';
 import parser from './parser.js';
 
 const validate = (url, urls) => yup.string().trim().required().url('mustBeValid')
@@ -18,13 +18,9 @@ const createPosts = (feedID, data) => (data.items.reverse().map((post) => {
   };
 }));
 
-const createViewPost = (data) => (data.map((post) => ({ postID: post.id, view: false })));
-
 const updatePosts = (id, data, state) => {
   const posts = createPosts(id, data);
-  const viewPost = createViewPost(posts);
   state.posts.push(...posts);
-  state.ui.viewPostsIds.push(...viewPost);
 };
 
 const createFeed = (url, feed) => ({ ...feed, id: _.uniqueId() });
@@ -52,11 +48,9 @@ const addFeed = (url, data, state) => {
   const dataFeed = createFeed(url, data);
   const { id } = dataFeed;
   const dataPosts = createPosts(id, data);
-  const dataView = createViewPost(dataPosts);
   state.urls.push(url);
   state.feeds.push(dataFeed);
   state.posts.push(...dataPosts);
-  state.ui.viewPostsIds.push(...dataView);
 };
 
 const defaultLng = 'ru';
@@ -69,22 +63,7 @@ export default () => {
     resources,
   })
     .then(() => {
-      const elements = {
-        header: document.querySelector('.header'),
-        form: document.querySelector('.rss-form'),
-        input: document.getElementById('url-input'),
-        btn: document.querySelector('[aria-label="add"]'),
-        feedback: document.querySelector('.feedback'),
-        main: document.querySelector('.main'),
-        posts: document.querySelector('.posts'),
-        ul: document.querySelector('.group-feeds'),
-        feeds: document.querySelector('.feeds'),
-        modal: document.querySelector('.modal'),
-        modalTitle: document.querySelector('.modal-title'),
-        modalBody: document.querySelector('.modal-body'),
-        read: document.querySelector('.read'),
-        btnLng: document.querySelector('.btn-group-sm'),
-      };
+      const elements = getElements();
       renderText(i18nextInstance, elements);
       const state = {
         processing: 'ready for addition',
@@ -124,9 +103,8 @@ export default () => {
       elements.posts.addEventListener('click', (event) => {
         const { id } = event.target.dataset;
         if (id) {
-          const review = watchedState.posts.find((post) => post.id === id);
-          watchedState.ui.modal = review;
-          watchedState.ui.viewPostsIds.push({ postId: id });
+          watchedState.ui.modal = watchedState.posts.find((post) => post.id === id);
+          watchedState.ui.viewPostsIds.push(id);
         }
       });
 

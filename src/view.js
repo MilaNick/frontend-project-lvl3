@@ -1,4 +1,4 @@
-const elements = {
+export const getElements = () => ({
   header: document.querySelector('.header'),
   form: document.querySelector('.rss-form'),
   input: document.getElementById('url-input'),
@@ -13,7 +13,9 @@ const elements = {
   modalBody: document.querySelector('.modal-body'),
   read: document.querySelector('.read'),
   btnLng: document.querySelector('.btn-group-sm'),
-};
+});
+
+const elements = getElements();
 
 export const renderText = (i18n, elems) => {
   const title = elems.header.querySelector('.display-3');
@@ -105,11 +107,8 @@ const renderMessage = (elems, message, i18n) => {
   elems.feedback.textContent = i18n.t([`messages.${message}`, 'messages.default']);
 };
 
-const renderView = (data, state) => {
-  const view = state.ui.viewPostsIds;
-  const viewPosts = data.filter((post) => view.includes(post.id));
-  viewPosts.forEach((item) => {
-    const id = item.postId;
+const renderView = (ids) => {
+  ids.forEach((id) => {
     const link = document.querySelector(`[data-id="${id}"]`);
     link.classList.remove('fw-bold');
     link.classList.add('fw-normal', 'fw-normal-grey');
@@ -181,7 +180,7 @@ export default (state, i18n) => (path, value) => {
       break;
 
     case 'ui.viewPostsIds':
-      renderView(value, state);
+      renderView(value);
       break;
 
     case 'feeds':
