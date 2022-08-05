@@ -17,7 +17,9 @@ const createPosts = (feedID, data) => (data.items.reverse().map((post) => {
     id: _.uniqueId(), feedID, title, description, link,
   };
 }));
+
 const createViewPost = (data) => (data.map((post) => ({ postID: post.id, view: false })));
+
 const updatePosts = (id, data, state) => {
   const posts = createPosts(id, data);
   const viewPost = createViewPost(posts);
@@ -26,6 +28,7 @@ const updatePosts = (id, data, state) => {
 };
 
 const createFeed = (url, feed) => ({ ...feed, id: _.uniqueId() });
+
 const updateFeeds = (state) => {
   const promise = state.feeds.map((feed) => axios
     .get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`)
@@ -44,6 +47,7 @@ const updateFeeds = (state) => {
     .catch(() => {}));
   Promise.all(promise).finally(() => setTimeout(() => updateFeeds(state), 5000));
 };
+
 const addFeed = (url, data, state) => {
   const dataFeed = createFeed(url, data);
   const { id } = dataFeed;
@@ -116,6 +120,7 @@ export default () => {
             watchedState.message = error.message;
           });
       }));
+
       elements.posts.addEventListener('click', (event) => {
         const { id } = event.target.dataset;
         if (id) {
@@ -124,6 +129,7 @@ export default () => {
           watchedState.ui.viewPostsIds.push({ postId: id });
         }
       });
+
       elements.btnLng.addEventListener('click', (event) => {
         event.preventDefault();
         const { lng } = event.target.dataset;
