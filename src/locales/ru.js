@@ -7,6 +7,7 @@ export default {
       rssExists: 'RSS уже существует',
       'Network Error': 'Ошибка сети',
       success: 'RSS успешно загружен',
+      default: 'Что-то пошло не так',
     },
     titleHeader: 'RSS агрегатор',
     description: 'Начните читать RSS сегодня! Это легко, это красиво.',

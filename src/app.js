@@ -22,7 +22,7 @@ const updatePosts = (id, data, state) => {
   const posts = createPosts(id, data);
   const viewPost = createViewPost(posts);
   state.posts.push(...posts);
-  state.viewPosts.push(...viewPost);
+  state.ui.viewPostsIds.push(...viewPost);
 };
 
 const createFeed = (url, feed) => ({ ...feed, id: _.uniqueId() });
@@ -34,7 +34,6 @@ const updateFeeds = (state) => {
       const newPosts = parser(response.data.contents).items;
       const oldPosts = state.posts.filter((post) => post.feedID === id);
       const diff = _.differenceWith(newPosts, oldPosts, (a, b) => a.link === b.link);
-
       if (diff.length > 0) {
         const data = {
           items: diff,
@@ -42,9 +41,7 @@ const updateFeeds = (state) => {
         updatePosts(id, data, state);
       }
     })
-    .catch((err) => {
-      state.message = err;
-    }));
+    .catch(() => {}));
   Promise.all(promise).finally(() => setTimeout(() => updateFeeds(state), 5000));
 };
 const addFeed = (url, data, state) => {
@@ -55,7 +52,7 @@ const addFeed = (url, data, state) => {
   state.urls.push(url);
   state.feeds.push(dataFeed);
   state.posts.push(...dataPosts);
-  state.viewPosts.push(...dataView);
+  state.ui.viewPostsIds.push(...dataView);
 };
 
 const defaultLng = 'ru';
@@ -91,9 +88,11 @@ export default () => {
         urls: [],
         feeds: [],
         posts: [],
-        viewPosts: [],
-        modal: null,
-        lng: defaultLng,
+        ui: {
+          viewPostsIds: [],
+          modal: null,
+          lng: defaultLng,
+        },
       };
 
       const watchedState = onChange(state, getHandler(state, i18nextInstance));
@@ -121,15 +120,14 @@ export default () => {
         const { id } = event.target.dataset;
         if (id) {
           const review = watchedState.posts.find((post) => post.id === id);
-          console.log(review);
-          watchedState.modal = review;
-          watchedState.viewPosts.push({ postId: id, view: true });
+          watchedState.ui.modal = review;
+          watchedState.ui.viewPostsIds.push({ postId: id });
         }
       });
       elements.btnLng.addEventListener('click', (event) => {
         event.preventDefault();
         const { lng } = event.target.dataset;
-        if (lng) watchedState.lng = lng;
+        if (lng) watchedState.ui.lng = lng;
       });
       updateFeeds(watchedState);
     });

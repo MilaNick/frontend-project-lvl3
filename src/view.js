@@ -102,11 +102,12 @@ const renderFeeds = (elems, feeds, i18n) => {
 };
 
 const renderMessage = (elems, message, i18n) => {
-  elems.feedback.textContent = i18n.t(`messages.${message}`);
+  elems.feedback.textContent = i18n.t([`messages.${message}`, 'messages.default']);
 };
 
-const renderView = (data) => {
-  const viewPosts = data.filter((post) => post.view === true);
+const renderView = (data, state) => {
+  const view = state.ui.viewPostsIds;
+  const viewPosts = data.filter((post) => view.includes(post.id));
   viewPosts.forEach((item) => {
     const id = item.postId;
     const link = document.querySelector(`[data-id="${id}"]`);
@@ -124,9 +125,9 @@ const renderModal = (elems, value) => {
 
 const changeLng = (elems, value, state, i18n) => {
   const {
-    message, feeds, posts, viewPosts,
+    message, feeds, posts,
   } = state;
-  const view = viewPosts;
+  const view = state.ui.viewPostsIds;
   const lngBtn = document.querySelectorAll('.btn-outline-secondary');
   lngBtn.forEach((btn) => btn.classList.remove('active'));
   const activeBtn = document.querySelector(`[data-lng="${value}"]`);
@@ -137,7 +138,7 @@ const changeLng = (elems, value, state, i18n) => {
   if (feeds.length > 0) {
     renderFeeds(elems, feeds, i18n);
     renderPosts(elems, posts, i18n);
-    renderView(view);
+    renderView(posts, view);
   }
 };
 
@@ -179,8 +180,8 @@ export default (state, i18n) => (path, value) => {
       renderPosts(elements, value, i18n);
       break;
 
-    case 'viewPosts':
-      renderView(value);
+    case 'ui.viewPostsIds':
+      renderView(value, state);
       break;
 
     case 'feeds':
@@ -191,11 +192,11 @@ export default (state, i18n) => (path, value) => {
       renderMessage(elements, value, i18n);
       break;
 
-    case 'modal':
+    case 'ui.modal':
       renderModal(elements, value);
       break;
 
-    case 'lng':
+    case 'ui.lng':
       changeLng(elements, value, state, i18n);
       break;
 

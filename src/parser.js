@@ -1,9 +1,9 @@
 export default (contents, type = 'application/xml') => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(contents, type);
-  const err = doc.querySelector('parserError');
-  if (err) {
-    throw new Error(err.textContent);
+  const error = doc.querySelector('parserError');
+  if (error) {
+    throw new Error(error.textContent);
   }
   const title = doc.querySelector('title').textContent;
   const description = doc.querySelector('description').textContent;
